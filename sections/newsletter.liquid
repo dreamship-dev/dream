@@ -1,0 +1,157 @@
+<div class="page-width">
+  <div class="section-block section-block--padding">
+    <div class="{% if section.settings.heading != blank or section.settings.subheading != blank %}section-block__header {% endif %}text-center">
+      {% unless section.settings.heading == blank %}
+        <h4 class="h1--mini section-block__title">{{ section.settings.heading | escape }}</h4>
+      {% endunless %}
+      {% unless section.settings.subheading == blank %}
+        <div class="section-block__subtext">{{ section.settings.subheading }}</div>
+      {% endunless %}
+    </div>
+    <div class="grid">
+      <div class="grid__item medium-up--two-thirds medium-up--push-one-sixth">
+        <div class="form-vertical">
+          {% form 'customer' %}
+            {{ form.errors | default_errors }}
+            {% if form.posted_successfully? %}
+              <p class="form-success">{{ 'general.newsletter_form.confirmation' | t }}</p>
+            {% else %}
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <label for="NewsletterEmail-{{ block.id }}" class="label--hidden">{{ 'general.newsletter_form.newsletter_label' | t }}</label>
+              <div class="input-group">
+                <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.newsletter_placeholder' | t }}" name="contact[email]" id="NewsletterEmail-{{ block.id }}" class="input-group__field" autocorrect="off" autocapitalize="off">
+                <div class="input-group__btn">
+                  <button type="submit" class="btn btn--narrow" name="commit">
+                    {% include 'icon-arrow-right' %}
+                    <span class="icon__fallback-text">{{ 'general.newsletter_form.submit' | t }}</span>
+                  </button>
+                </div>
+              </div>
+            {% endif %}
+          {% endform %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% schema %}
+{
+  "name": {
+    "de": "Newsletter",
+    "en": "Newsletter",
+    "es": "Boletín",
+    "fr": "Newsletter",
+    "it": "Newsletter",
+    "ja": "メールマガジン",
+    "nl": "Nieuwsbrief",
+    "pt-BR": "Newsletter",
+    "zh-CN": "新闻通讯",
+    "zh-TW": "電子報"
+  },
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": {
+        "de": "Titel",
+        "en": "Heading",
+        "es": "Título",
+        "fr": "Titre",
+        "it": "Heading",
+        "ja": "見出し",
+        "nl": "Kop",
+        "pt-BR": "Título",
+        "zh-CN": "标题",
+        "zh-TW": "標題"
+      },
+      "default": {
+        "de": "Unseren Newsletter abonnieren",
+        "en": "Subscribe to our newsletter",
+        "es": "Suscríbete a nuestro boletín de noticias",
+        "fr": "S'inscrire à la newsletter",
+        "it": "Iscriviti alla nostra newsletter",
+        "ja": "ストアからのお知らせを受け取る",
+        "nl": "Abonneren op onze nieuwsbrief",
+        "pt-BR": "Receber nosso newsletter",
+        "zh-CN": "订阅我们的新闻通讯",
+        "zh-TW": "訂閱我們的電子報"
+      }
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": {
+        "de": "Unter-Überschrift",
+        "en": "Subheading",
+        "es": "Subtítulo",
+        "fr": "Sous-titre",
+        "it": "Sottotitolo",
+        "ja": "小見出し",
+        "nl": "Subkop",
+        "pt-BR": "Subtítulo",
+        "zh-CN": "副标题",
+        "zh-TW": "子標題"
+      },
+      "default": {
+        "de": "<p>Werbeaktionen, neue Produkte und Sonderangebote. Direkt in Ihrem Posteingang.</p>",
+        "en": "<p>Promotions, new products and sales. Directly to your inbox.</p>",
+        "es": "<p>Promociones, nuevos productos y ofertas. Directamente a tu bandeja de entrada.</p>",
+        "fr": "<p>Promotions, nouveaux produits et soldes. Directement dans votre boîte de réception.</p>",
+        "it": "<p>Promozioni, nuovi prodotti e offerte. Direttamente nella tua inbox.</p>",
+        "ja": "<p>プロモーション、新商品、セールについて、あなたの受信箱に直接知らせる。</p>",
+        "nl": "<p>Promoties, nieuwe producten en uitverkoop rechtstreeks in uw inbox.</p>",
+        "pt-BR": "<p>Promoções, novos produtos e vendas. Diretamente para sua caixa de entrada.</p>",
+        "zh-CN": "<p>促销、新产品和销售。直接发送到您的收件箱。</p>",
+        "zh-TW": "<p>讓您直接在收件匣內收取促銷活動、最新產品和特賣活動訊息。</p>"
+      }
+    },
+    {
+      "type": "paragraph",
+      "content": {
+        "de": "Für alle Kunden, die sich anmelden, wird in Shopify ein Konto erstellt. [Kunden anzeigen](/admin/customers?query=&accepts_marketing=1)",
+        "en": "Any customers who sign up will have an account created for them in Shopify. [View customers](/admin/customers?query=&accepts_marketing=1)",
+        "es": "Todos los clientes que se registren tendrán una cuenta creada para ellos en Shopify. [Ver clientes](/admin/customers?query=&accepts_marketing=1)",
+        "fr": "Les clients qui s'inscrivent auront un compte créé pour eux dans Shopify. [Afficher les clients](/admin/customers?query=&accepts_marketing=1)",
+        "it": "Qualsiasi cliente che si iscrive avrà un account creato appositamente su Shopify. [Visualizza clienti](/admin/customers?query=&accepts_marketing=1)",
+        "ja": "サインアップしたお客様は、Shopifyでアカウントが作成されます。[お客様を表示](/admin/customers?query=&accepts_marketing=1)",
+        "nl": "Voor alle klanten die zich aanmelden, wordt een Shopify-account gemaakt. [Klanten weergeven](/admin/customers?query=&accepts_marketing=1)",
+        "pt-BR": "Todos os clientes que se inscreverem terão uma conta criada para eles na Shopify. [View customers](/admin/customers?query=&accepts_marketing=1)",
+        "zh-CN": "任何注册用户都将在 Shopify 中拥有一个为他们创建的帐户。[查看客户](/admin/customers?query=&accepts_marketing=1)",
+        "zh-TW": "客戶註冊後就可以擁有 Shopify 的帳號。[檢視客戶](/admin/customers?query=&accepts_marketing=1)"
+      }
+    }
+  ],
+  "presets": [
+    {
+      "name": {
+        "de": "Newsletter",
+        "en": "Newsletter",
+        "es": "Boletín",
+        "fr": "Newsletter",
+        "it": "Newsletter",
+        "ja": "メールマガジン",
+        "nl": "Nieuwsbrief",
+        "pt-BR": "Newsletter",
+        "zh-CN": "新闻通讯",
+        "zh-TW": "電子報"
+      },
+      "category": {
+        "de": "Promotional",
+        "en": "Promotional",
+        "es": "Promocional",
+        "fr": "Promotionnel",
+        "it": "Promozionale",
+        "ja": "プロモーション用",
+        "nl": "Promotioneel",
+        "pt-BR": "Promocional",
+        "zh-CN": "促销",
+        "zh-TW": "宣傳活動"
+      }
+    }
+  ]
+}
+{% endschema %}

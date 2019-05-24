@@ -1,0 +1,562 @@
+<footer class="site-footer" role="contentinfo">
+  <div class="page-width">
+    <div class="flex-footer">
+      {% for block in section.blocks %}
+        <div class="flex__item" {{ block.shopify_attributes }}>
+          {% case block.type %}
+            {% when 'social' %}
+              <div class="site-footer__section">
+                {% if block.settings.title != blank %}
+                  <h4 class="h1 site-footer__section-title text-{{ block.settings.align }}">{{ block.settings.title | escape }}</h4>
+                {% endif %}
+                <ul class="list--inline social-icons text-{{ block.settings.align }}">
+                  {% if settings.social_facebook_link != blank %}
+                    <li>
+                      <a href="{{ settings.social_facebook_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Facebook' }}">
+                        {% include 'icon-facebook' %}
+                        <span class="icon__fallback-text">Facebook</span>
+                      </a>
+                    </li>
+                  {% endif %}
+                  {% if settings.social_twitter_link != blank %}
+                    <li>
+                      <a href="{{ settings.social_twitter_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Twitter' }}">
+                        {% include 'icon-twitter' %}
+                        <span class="icon__fallback-text">Twitter</span>
+                      </a>
+                    </li>
+                  {% endif %}
+                  {% if settings.social_pinterest_link != blank %}
+                    <li>
+                      <a href="{{ settings.social_pinterest_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Pinterest' }}">
+                        {% include 'icon-pinterest' %}
+                        <span class="icon__fallback-text">Pinterest</span>
+                      </a>
+                    </li>
+                  {% endif %}
+                  {% if settings.social_instagram_link != blank %}
+                    <li>
+                      <a href="{{ settings.social_instagram_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Instagram' }}">
+                        {% include 'icon-instagram' %}
+                        <span class="icon__fallback-text">Instagram</span>
+                      </a>
+                    </li>
+                  {% endif %}
+                  {% if settings.social_tumblr_link != blank %}
+                    <li>
+                      <a href="{{ settings.social_tumblr_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Tumblr' }}">
+                        {% include 'icon-tumblr' %}
+                        <span class="icon__fallback-text">Tumblr</span>
+                      </a>
+                    </li>
+                  {% endif %}
+                  {% if settings.social_snapchat_link != blank %}
+                    <li>
+                      <a href="{{ settings.social_snapchat_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Snapchat' }}">
+                        {% include 'icon-snapchat' %}
+                        <span class="icon__fallback-text">Snapchat</span>
+                      </a>
+                    </li>
+                  {% endif %}
+                  {% if settings.social_youtube_link != blank %}
+                    <li>
+                      <a href="{{ settings.social_youtube_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'YouTube' }}">
+                        {% include 'icon-youtube' %}
+                        <span class="icon__fallback-text">YouTube</span>
+                      </a>
+                    </li>
+                  {% endif %}
+                  {% if settings.social_vimeo_link != blank %}
+                    <li>
+                      <a href="{{ settings.social_vimeo_link | escape }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Vimeo' }}">
+                        {% include 'icon-vimeo' %}
+                        <span class="icon__fallback-text">Vimeo</span>
+                      </a>
+                    </li>
+                  {% endif %}
+                </ul>
+              </div>
+
+            {% when 'menu' %}
+              {% if linklists[block.settings.link_list].links.size > 0 %}
+                <div class="site-footer__section">
+                  <h4 class="h1 site-footer__section-title">{{ linklists[block.settings.link_list].title }}</h4>
+                  <ul class="site-footer__list">
+                    {% for link in linklists[block.settings.link_list].links %}
+                      <li class="site-footer__list-item"><a href="{{ link.url }}">{{ link.title }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+
+            {% when 'text' %}
+              <div class="site-footer__section">
+                <h4 class="h1 site-footer__section-title">{{ block.settings.title | escape }}</h4>
+                <div class="rte-setting">{{ block.settings.text }}</div>
+              </div>
+
+            {% when 'newsletter' %}
+              <style>
+                .site-footer__newsletter-input {
+                  background-color: {{ block.settings.color_newsletter_input }};
+                  color: {{ block.settings.color_newsletter_input_text }};
+                }
+
+                .site-footer__newsletter-input::-webkit-input-placeholder {
+                  color: {{ block.settings.color_newsletter_input_text }};
+                  opacity: 0.7;
+                }
+
+                .site-footer__newsletter-input:-moz-placeholder {
+                  color: {{ block.settings.color_newsletter_input_text }};
+                  opacity: 0.7;
+                }
+
+                .site-footer__newsletter-input:-ms-input-placeholder {
+                  color: {{ block.settings.color_newsletter_input_text }};
+                  opacity: 0.7;
+                }
+
+                .site-footer__newsletter-input::-ms-input-placeholder {
+                  color: {{ block.settings.color_newsletter_input_text }};
+                  opacity: 1;
+                }
+              </style>
+              <div class="site-footer__section">
+                <h4 class="site-footer__section-title h1">
+                  {% if block.settings.title != blank %}
+                    {{ block.settings.title | escape }}
+                  {% endif %}
+                </h4>
+                <div class="form-vertical">
+                  {% form 'customer' %}
+                    {{ form.errors | default_errors }}
+                    {% if form.posted_successfully? %}
+                      <p class="form-success">{{ 'general.newsletter_form.confirmation' | t }}</p>
+                    {% else %}
+                      <input type="hidden" name="contact[tags]" value="newsletter">
+                      <label for="NewsletterEmail-{{ block.id }}" class="site-footer__newsletter-label">
+                        {% if block.settings.subheading != blank %}
+                          {{ block.settings.subheading }}
+                        {% endif %}
+                      </label>
+                      <div class="input-group">
+                        <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.newsletter_placeholder' | t }}" name="contact[email]" id="NewsletterEmail-{{ block.id }}" class="input-group__field site-footer__newsletter-input" autocorrect="off" autocapitalize="off">
+                        <div class="input-group__btn">
+                          <button type="submit" class="btn btn--narrow" name="commit">
+                            {% include 'icon-arrow-right' %}
+                            <span class="icon__fallback-text">{{ 'general.newsletter_form.submit' | t }}</span>
+                          </button>
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endform %}
+                </div>
+              </div>
+
+          {% endcase %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="site-footer__copyright">
+    <div class="page-width">
+      <div class="grid medium-up--grid--table">
+        <div class="grid__item medium-up--one-half">
+          <small>&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: '/' }}. {{ powered_by_link }}</small>
+        </div>
+        <div class="grid__item medium-up--one-half medium-up--text-right">
+          {%- if section.settings.show_payment_icons -%}
+            {%- unless shop.enabled_payment_types == empty -%}
+              <span class="visually-hidden">{{ 'general.payment.method' | t }}</span>
+              <ul class="list--inline payment-icons">
+                {%- for type in shop.enabled_payment_types -%}
+                  <li>
+                    {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endunless -%}
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+
+{% schema %}
+{
+  "name": {
+    "de": "Fußzeile",
+    "en": "Footer",
+    "es": "Pie de página",
+    "fr": "Pied de page",
+    "it": "Footer",
+    "ja": "フッター",
+    "nl": "Voettekst",
+    "pt-BR": "Rodapé",
+    "zh-CN": "页脚",
+    "zh-TW": "頁尾"
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": {
+        "de": "Zahlungs-Buttons anzeigen",
+        "en": "Show payment icons",
+        "es": "Mostrar iconos de pago",
+        "fr": "Afficher les icônes de paiement",
+        "it": "Mostra le icone di pagamento",
+        "ja": "支払いアイコンを表示する",
+        "nl": "Betalingspictogrammen weergeven",
+        "pt-BR": "Exibir ícones de pagamento",
+        "zh-CN": "显示付款图标",
+        "zh-TW": "顯示付款圖示"
+      },
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "social",
+      "name": {
+        "de": "Social-Media-Konten",
+        "en": "Social accounts",
+        "es": "Cuentas de redes sociales",
+        "fr": "Comptes sociaux",
+        "it": "Account social",
+        "ja": "SNSアカウント",
+        "nl": "Social media-accounts",
+        "pt-BR": "Contas em redes sociais",
+        "zh-CN": "社媒帐户",
+        "zh-TW": "社群帳號"
+      },
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "de": "Titel",
+            "en": "Heading",
+            "es": "Título",
+            "fr": "Titre",
+            "it": "Heading",
+            "ja": "見出し",
+            "nl": "Kop",
+            "pt-BR": "Título",
+            "zh-CN": "标题",
+            "zh-TW": "標題"
+          },
+          "default": {
+            "de": "Folge uns",
+            "en": "Follow us",
+            "es": "Síguenos",
+            "fr": "Suivez-nous",
+            "it": "Seguici",
+            "ja": "フォローする",
+            "nl": "Volg ons",
+            "pt-BR": "Acompanhe",
+            "zh-CN": "关注我们",
+            "zh-TW": "追蹤我們"
+          }
+        },
+        {
+          "type": "radio",
+          "id": "align",
+          "label": {
+            "de": "Symbolausrichtung",
+            "en": "Icon alignment",
+            "es": "Alineación de ícono",
+            "fr": "Alignement des icônes",
+            "it": "Allineamento icona",
+            "ja": "アイコンのアラインメント",
+            "nl": "Pictogram uitlijning",
+            "pt-BR": "Alinhamento de ícone",
+            "zh-CN": "图标对齐方式",
+            "zh-TW": "圖示對齊"
+          },
+          "options": [
+            {
+              "value": "left",
+              "label": {
+                "de": "Links",
+                "en": "Left",
+                "es": "Izquierda",
+                "fr": "Gauche",
+                "it": "Sinistra",
+                "ja": "左",
+                "nl": "Links",
+                "pt-BR": "Esquerda",
+                "zh-CN": "左侧",
+                "zh-TW": "左方"
+              }
+            },
+            {
+              "value": "center",
+              "label": {
+                "de": "Mitte",
+                "en": "Center",
+                "es": "Centrar",
+                "fr": "Centre",
+                "it": "Al centro",
+                "ja": "中央",
+                "nl": "Midden",
+                "pt-BR": "Centro",
+                "zh-CN": "居中",
+                "zh-TW": "置中"
+              }
+            },
+            {
+              "value": "right",
+              "label": {
+                "de": "Rechts",
+                "en": "Right",
+                "es": "Derecha",
+                "fr": "Droite",
+                "it": "Destra",
+                "ja": "右",
+                "nl": "Rechts",
+                "pt-BR": "Direita",
+                "zh-CN": "右侧",
+                "zh-TW": "右方"
+              }
+            }
+          ],
+          "default": "left"
+        }
+      ]
+    },
+    {
+      "type": "menu",
+      "name": {
+        "de": "Menü",
+        "en": "Menu",
+        "es": "Menú",
+        "fr": "Menu",
+        "it": "Menu",
+        "ja": "メニュー",
+        "nl": "Menu",
+        "pt-BR": "Menu",
+        "zh-CN": "菜单",
+        "zh-TW": "選單"
+      },
+      "settings": [
+        {
+          "id": "link_list",
+          "type": "link_list",
+          "label": {
+            "de": "Menü",
+            "en": "Menu",
+            "es": "Menú",
+            "fr": "Menu",
+            "it": "Menu",
+            "ja": "メニュー",
+            "nl": "Menu",
+            "pt-BR": "Menu",
+            "zh-CN": "菜单",
+            "zh-TW": "選單"
+          },
+          "default": "footer",
+          "info": {
+            "de": "Dieses Menü zeigt keine Dropdowns an",
+            "en": "This menu won't show dropdown items",
+            "es": "Este menú no mostrará elementos desplegables",
+            "fr": "Ce menu n'affichera pas les éléments des menus déroulants",
+            "it": "Questo menu non mostrerà elementi a discesa",
+            "ja": "このメニューにはドロップダウンアイテムは表示されません",
+            "nl": "Dit menu laat geen vervolgkeuze-items zien.",
+            "pt-BR": "Este menu não mostra itens suspensos",
+            "zh-CN": "此菜单不会显示下拉项",
+            "zh-TW": "這個選單不會顯示下拉式項目"
+          }
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": {
+        "de": "Text",
+        "en": "Text",
+        "es": "Texto",
+        "fr": "Texte",
+        "it": "Testo",
+        "ja": "テキスト",
+        "nl": "Tekst",
+        "pt-BR": "Texto",
+        "zh-CN": "文本",
+        "zh-TW": "文字"
+      },
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "de": "Titel",
+            "en": "Heading",
+            "es": "Título",
+            "fr": "Titre",
+            "it": "Heading",
+            "ja": "見出し",
+            "nl": "Kop",
+            "pt-BR": "Título",
+            "zh-CN": "标题",
+            "zh-TW": "標題"
+          },
+          "default": {
+            "de": "Textspalte",
+            "en": "Text column",
+            "es": "Columna de texto",
+            "fr": "Colonne de texte",
+            "it": "Colonna di testo",
+            "ja": "テキスト列",
+            "nl": "Tekst kolom",
+            "pt-BR": "Coluna de texto",
+            "zh-CN": "文本列",
+            "zh-TW": "文字欄"
+          }
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": {
+            "de": "Text",
+            "en": "Text",
+            "es": "Texto",
+            "fr": "Texte",
+            "it": "Testo",
+            "ja": "テキスト",
+            "nl": "Tekst",
+            "pt-BR": "Texto",
+            "zh-CN": "文本",
+            "zh-TW": "文字"
+          },
+          "default": {
+            "de": "<p>Teilen Sie Ihre Shop-Details, Werbeaktionen oder Markeninhalte mit Ihren Kunden</p>",
+            "en": "<p>Share store details, promotions, or brand content with your customers</p>",
+            "es": "<p>Comparte detalles de la tienda, promociones o contenido de la marca con tus clientes.</p>",
+            "fr": "<p>Partagez les détails de la boutique, les promotions ou le contenu de la marque avec vos clients</p>",
+            "it": "<p>Condividi dettagli del negozio, promozioni o contenuto del brand con i clienti</p>",
+            "ja": "<p>ストア詳細、プロモーション、ブランドのコンテンツをお客様と共有する</p>",
+            "nl": "<p>Deel winkeldetails, promoties of merkinhoud met uw klanten</p>",
+            "pt-BR": "<p>Compartilhe detalhes da loja, promoções ou conteúdo da marca com seus clientes</p>",
+            "zh-CN": "<p>与您的客户分享商店详细信息、促销信息或品牌内容</p>",
+            "zh-TW": "<p>與客戶分享商店的詳細資訊、宣傳活動或品牌內容。</p>"
+          }
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": {
+        "de": "Newsletter",
+        "en": "Newsletter",
+        "es": "Boletín",
+        "fr": "Newsletter",
+        "it": "Newsletter",
+        "ja": "メールマガジン",
+        "nl": "Nieuwsbrief",
+        "pt-BR": "Newsletter",
+        "zh-CN": "新闻通讯",
+        "zh-TW": "電子報"
+      },
+      "limit": 1,
+      "settings": [
+        {
+          "type": "color",
+          "id": "color_newsletter_input",
+          "label": {
+            "de": "Newsletter-Feld",
+            "en": "Newsletter field",
+            "es": "Campo del boletín",
+            "fr": "Champ de la newsletter",
+            "it": "Campo newsletter",
+            "ja": "メールマガジンのフィールド",
+            "nl": "Veld nieuwsbrief",
+            "pt-BR": "Campo da newsletter",
+            "zh-CN": "新闻稿字段",
+            "zh-TW": "電子報欄位"
+          },
+          "default": "#1a1a1a"
+        },
+        {
+          "type": "color",
+          "id": "color_newsletter_input_text",
+          "label": {
+            "de": "Newsletter-Text",
+            "en": "Newsletter text",
+            "es": "Texto del boletín",
+            "fr": "Texte de la newsletter",
+            "it": "Testo newsletter",
+            "ja": "メールマガジンのテキスト",
+            "nl": "Tekst nieuwsbrief",
+            "pt-BR": "Texto da newsletter",
+            "zh-CN": "新闻稿文本",
+            "zh-TW": "電子報文字"
+          },
+          "default": "#fff"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": {
+            "de": "Titel",
+            "en": "Heading",
+            "es": "Título",
+            "fr": "Titre",
+            "it": "Heading",
+            "ja": "見出し",
+            "nl": "Kop",
+            "pt-BR": "Título",
+            "zh-CN": "标题",
+            "zh-TW": "標題"
+          },
+          "default": {
+            "de": "Bleiben Sie auf dem Laufenden",
+            "en": "Be in the know",
+            "es": "Mantente informado",
+            "fr": "Restez au courant",
+            "it": "Rimani aggiornato",
+            "ja": "よく知ってください",
+            "nl": "Wees op de hoogte",
+            "pt-BR": "Fique por dentro",
+            "zh-CN": "消息灵通",
+            "zh-TW": "掌握最新動態"
+          }
+        },
+        {
+          "type": "richtext",
+          "id": "subheading",
+          "label": {
+            "de": "Unter-Überschrift",
+            "en": "Subheading",
+            "es": "Subtítulo",
+            "fr": "Sous-titre",
+            "it": "Sottotitolo",
+            "ja": "小見出し",
+            "nl": "Subkop",
+            "pt-BR": "Subtítulo",
+            "zh-CN": "副标题",
+            "zh-TW": "子標題"
+          },
+          "default": {
+            "de": "<p>Werbeaktionen, neue Produkte und Sonderangebote. Direkt in Ihrem Posteingang.</p>",
+            "en": "<p>Promotions, new products and sales. Directly to your inbox.</p>",
+            "es": "<p>Promociones, nuevos productos y ofertas. Directamente a tu bandeja de entrada.</p>",
+            "fr": "<p>Promotions, nouveaux produits et soldes. Directement dans votre boîte de réception.</p>",
+            "it": "<p>Promozioni, nuovi prodotti e offerte. Direttamente nella tua inbox.</p>",
+            "ja": "<p>プロモーション、新商品、セールについて、あなたの受信箱に直接知らせる。</p>",
+            "nl": "<p>Promoties, nieuwe producten en uitverkoop rechtstreeks in uw inbox.</p>",
+            "pt-BR": "<p>Promoções, novos produtos e vendas. Diretamente para sua caixa de entrada.</p>",
+            "zh-CN": "<p>促销、新产品和销售。直接发送到您的收件箱。</p>",
+            "zh-TW": "<p>讓您直接在收件匣內收取促銷活動、最新產品和特賣活動訊息。</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
