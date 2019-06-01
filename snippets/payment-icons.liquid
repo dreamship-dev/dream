@@ -1,0 +1,15 @@
+<!-- /snippets/payment-icons.liquid -->
+<div class="">
+  {%- unless shop.enabled_payment_types == empty -%}
+    <span class="visually-hidden">{{ 'general.payment.method' | t }}</span>
+    <ul class="list--inline payment-icons">
+      {%- for type in shop.enabled_payment_types -%}
+        <li>
+          {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endunless -%}
+</div>
+
+

@@ -64,6 +64,7 @@
   {% endif %}
 
   <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'focus.min.js' | asset_url }}" defer="defer"></script>
 
   {{ content_for_header }}
 </head>
@@ -112,8 +113,13 @@
     </div>
   {% endif %}
 
+
   <ul hidden>
     <li id="a11y-refresh-page-message">{{ 'general.accessibility.refresh_page' | t }}</li>
   </ul>
+
+  {% include 'product-delivery-modal' %} 
+  {% include 'product-size-modal' %} 
+
 </body>
 </html>

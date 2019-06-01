@@ -152,6 +152,46 @@
         {% capture "form_id" %}AddToCartForm-{{ section.id }}{%- endcapture %}
 
         {% form 'product', product, class:form_class, id:form_id %}
+          {% if section.settings.product_grouping_products %}
+            {% assign group_tags = product.tags | where: "group-" %}
+            {% if group_tags.size > 0 %}
+    
+              <hr>
+              <div class="selector-wrapper js product-form__item">
+                <label>Product Type</label>
+                <select class="single-option-selector single-option-selector-product-type product-form__input"
+                  id="ProductTypeSelector"
+                  data-name="product-type"
+                  data-index="option0"
+                >
+                  {% for tagged_product in collections.all.products %}      
+                    {% for tag in group_tags %}
+                      {% if tagged_product.tags contains tag %}
+                        <option value={{tagged_product.id}} data-url={{tagged_product.url}}>
+                          {% if tagged_product.metafields.dreamship.product %}
+                            {{ tagged_product.metafields.dreamship.product }}
+                          {% else %}
+                            {{ tagged_product.title }}
+                          {% endif %}
+                        </option>
+                      {% endif %}
+                    {% endfor %}
+                  {% endfor %}
+                </select>
+              </div>
+              <script>
+                document.getElementById("ProductTypeSelector").value = {{product.id}};
+                window.onload = function() {
+                  $( "#ProductTypeSelector" ).change(function() {
+                    var url =$("#ProductTypeSelector option:selected")[0].attributes['data-url'].value
+                    location.replace(url);
+                  });
+                };
+              </script>
+            {% endif %}
+
+          {% endif %}
+
           {% unless product.has_only_default_variant %}
             {% for option in product.options_with_values %}
               <div class="selector-wrapper js product-form__item">
@@ -203,11 +243,32 @@
           </div>
         {% endform %}
 
-        <hr>
+        {% if section.settings.size_chart_products or section.settings.delivery_chart_products %}
+          <hr>
+          {% if section.settings.size_chart_products %}
+            <a href='#' data-trigger="popup" data-detach={{ true }} data-target="#sizePopup">
+              Size Chart
+            </a>
+          {% endif %}
+          {% if section.settings.size_chart_products and section.settings.delivery_chart_products %}
+            <span>&nbsp;&mdash;&nbsp;</span>
+          {% endif %}
+          {% if section.settings.delivery_chart_products %}
+            <a href='#' data-trigger="popup" data-detach={{ true }} data-target="#deliveryPopup">
+              Delivery Times
+            </a>
+          {% endif %}
+        {% endif %}
 
+        <hr>
         <div class="rte product-single__description" itemprop="description">
           {{ product.description }}
         </div>
+
+        {% if section.settings.payment_icons_products %}
+          <hr>
+          {% include 'payment-icons', share_title: product.title, share_permalink: product.url, share_image: product %}
+        {% endif %}
 
         {% if section.settings.social_sharing_products %}
           <hr>
@@ -305,6 +366,47 @@
         "zh-TW": "啟用產品分享"
       },
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "payment_icons_products",
+      "label": {
+        "de": "Zahlungs-Buttons anzeigen",
+        "en": "Show payment icons",
+        "es": "Mostrar iconos de pago",
+        "fr": "Afficher les icônes de paiement",
+        "it": "Mostra le icone di pagamento",
+        "ja": "支払いアイコンを表示する",
+        "nl": "Betalingspictogrammen weergeven",
+        "pt-BR": "Exibir ícones de pagamento",
+        "zh-CN": "显示付款图标",
+        "zh-TW": "顯示付款圖示"
+      },
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "product_grouping_products",
+      "label": {
+        "en": "Enable product type grouping (if available)"
+      },
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "size_chart_products",
+      "label": {
+        "en": "Show size chart link (if available)"
+      },
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "delivery_chart_products",
+      "label": {
+        "en": "Show delivery time link (if available)"
+      },
+      "default": false
     }
   ]
 }
