@@ -1,4 +1,223 @@
 {
+  "current": {
+    "color_header_bg": "#ffffff",
+    "color_header_links": "#030303",
+    "color_body_bg": "#f7f7f7",
+    "color_content_bg": "#fff",
+    "color_body_headings": "#030303",
+    "color_body_text": "#666",
+    "color_button_bg": "#4447da",
+    "color_button_text": "#fff",
+    "color_footer_bg": "#ffffff",
+    "color_footer_text": "#030303",
+    "color_hero_text": "#fff",
+    "color_hero_bg": "#4447da",
+    "type_accent_family": "ibm_plex_sans_n4",
+    "type_accent_spacing": true,
+    "type_accent_transform": true,
+    "type_base_family": "ibm_plex_sans_n3",
+    "type_base_size": "16px",
+    "type_nav_size": "14px",
+    "type_nav_spacing": true,
+    "type_nav_transform": true,
+    "product_images_padding": true,
+    "product_vendor_enable": false,
+    "share_image": "",
+    "social_facebook_link": "asdfasd",
+    "social_twitter_link": "asdfasadf",
+    "social_pinterest_link": "asdfsd",
+    "social_instagram_link": "",
+    "social_tumblr_link": "",
+    "social_snapchat_link": "",
+    "social_youtube_link": "",
+    "social_vimeo_link": "",
+    "share_facebook": true,
+    "share_twitter": true,
+    "share_pinterest": true,
+    "favicon": "",
+    "checkout_header_image": "",
+    "checkout_logo_image": "",
+    "checkout_logo_position": "left",
+    "checkout_logo_size": "medium",
+    "checkout_body_background_image": "",
+    "checkout_body_background_color": "#fff",
+    "checkout_input_background_color_mode": "white",
+    "checkout_sidebar_background_image": "",
+    "checkout_sidebar_background_color": "#fafafa",
+    "checkout_heading_font": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
+    "checkout_body_font": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
+    "checkout_accent_color": "#4447da",
+    "checkout_button_color": "#4447da",
+    "checkout_error_color": "#e32c2b",
+    "checkout_banner_background_color": "#fff",
+    "checkout_call_to_action_color": "#4447da",
+    "checkout_use_header_image": false,
+    "color_newsletter_input": "#191919",
+    "sections": {
+      "slideshow": {
+        "type": "slideshow",
+        "blocks": {
+          "placeholder-0": {
+            "type": "slide",
+            "settings": {
+              "image": "",
+              "image_position": "center center",
+              "title": "Slide",
+              "button_label": "View all products",
+              "button_link": ""
+            }
+          },
+          "placeholder-1": {
+            "type": "slide",
+            "settings": {
+              "image": "",
+              "image_position": "center center",
+              "title": "Slide",
+              "button_label": "View all products",
+              "button_link": ""
+            }
+          }
+        },
+        "block_order": [
+          "placeholder-0",
+          "placeholder-1"
+        ],
+        "settings": {
+          "hero_home_height": "small",
+          "hero_home_auto": true,
+          "hero_home_auto_speed": 5
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "blocks": {
+          "linklist": {
+            "type": "menu",
+            "settings": {
+              "link_list": "footer"
+            }
+          },
+          "social": {
+            "type": "social",
+            "settings": {
+              "title": "Follow us",
+              "align": "left"
+            }
+          },
+          "1558661703127": {
+            "type": "newsletter",
+            "settings": {
+              "color_newsletter_input": "#191919",
+              "color_newsletter_input_text": "#666",
+              "title": "Subscribe",
+              "subheading": "<p>Promotions, new products and sales. Directly to your inbox.<\/p>"
+            }
+          }
+        },
+        "block_order": [
+          "linklist",
+          "social",
+          "1558661703127"
+        ],
+        "settings": {
+          "show_payment_icons": true
+        }
+      },
+      "featured-collections": {
+        "type": "featured-collections",
+        "blocks": {
+          "featured-collections-0": {
+            "type": "collection",
+            "settings": {
+              "collection": ""
+            }
+          },
+          "featured-collections-1": {
+            "type": "collection",
+            "settings": {
+              "collection": ""
+            }
+          },
+          "featured-collections-2": {
+            "type": "collection",
+            "settings": {
+              "collection": ""
+            }
+          }
+        },
+        "block_order": [
+          "featured-collections-0",
+          "featured-collections-1",
+          "featured-collections-2"
+        ],
+        "settings": {
+          "stretch_collection_image": false
+        }
+      },
+      "featured-products": {
+        "type": "featured-products",
+        "settings": {
+          "collection": "new-products",
+          "rows": 1
+        }
+      },
+      "image-content": {
+        "type": "image-content",
+        "blocks": {
+          "image-content-0": {
+            "type": "image_block",
+            "settings": {
+              "image": ""
+            }
+          },
+          "image-content-1": {
+            "type": "text_block",
+            "settings": {
+              "title": "Image with text",
+              "text": "<p>Pair large text with an image to give focus to your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+              "align": "left"
+            }
+          }
+        },
+        "block_order": [
+          "image-content-0",
+          "image-content-1"
+        ],
+        "settings": {}
+      },
+      "header": {
+        "type": "header",
+        "settings": {
+          "logo": "shopify:\/\/shop_images\/wordmark-white_c1e5c2b4-5a03-4ee0-8bad-7aeaeda67e75.png",
+          "logo_max_width": "150",
+          "main_linklist": "main-menu",
+          "promo_bar_enable": true,
+          "promo_bar_text": "We've got brand new products!",
+          "promo_bar_link": "shopify:\/\/products\/standard-tee-pqw2lzj-standard-hoodie-743"
+        }
+      },
+      "product-template": {
+        "type": "product-template",
+        "settings": {
+          "enable_ajax": false,
+          "stock_enable": false,
+          "social_sharing_products": true
+        }
+      },
+      "collection-filters": {
+        "type": "collection-filters",
+        "settings": {
+          "product_tags_enable": false,
+          "product_sorting_enable": true
+        }
+      }
+    },
+    "content_for_index": [
+      "featured-collections",
+      "featured-products",
+      "image-content"
+    ]
+  },
   "presets": {
     "Default": {
       "checkout_accent_color": "#4447da",
