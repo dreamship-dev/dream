@@ -6528,9 +6528,8 @@ $transitionProperty: all;
 $transitionSpeed: 0.3s;
 $transitionStyle: ease-out;
 $transition: $transitionProperty $transitionSpeed $transitionStyle;
-$gutter: 50px;
+$gutter: 20px;
 $colorBackground: #fff;
-$colorText: #000;
 
 // Prefixer (See https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/addons/_prefixer.scss)
 @mixin prefixer($property, $value, $prefixes: webkit moz ms spec) {
@@ -6589,6 +6588,11 @@ $colorText: #000;
     opacity: 1;
     visibility: visible;
   }
+  .popup-header {
+    @include flex();
+    @include justify-content(space-between);
+    @include align-items(flex-start);
+  }
   .popup-content {
     display: inline-block;
     z-index: 9999;
@@ -6596,12 +6600,11 @@ $colorText: #000;
     max-height: 100%;
     overflow: auto; // Optional line for overly tall popups
     padding: $gutter;
-    background-color: $colorBackground;
+    background-color: $color-content;
     cursor: default;
-    color: $colorText;
   }
   &.overlay {
-    background: rgba($colorText, 0.85);
+    background: rgba($color-body-text, 0.85);
     @include overlay();
     .popup-outside {
       position: absolute;
@@ -6632,6 +6635,7 @@ $colorText: #000;
   .popup-close {
     display: block;
     position: absolute;
+    fill: $color-body-text;
     top: $gutter/2;
     right: $gutter/2;
   }

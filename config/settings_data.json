@@ -52,7 +52,7 @@
     "checkout_banner_background_color": "#fff",
     "checkout_call_to_action_color": "#4447da",
     "checkout_use_header_image": false,
-    "color_newsletter_input": "#191919",
+    "color_newsletter_input": "#F4F4F4",
     "sections": {
       "slideshow": {
         "type": "slideshow",
@@ -107,7 +107,7 @@
           "1558661703127": {
             "type": "newsletter",
             "settings": {
-              "color_newsletter_input": "#191919",
+              "color_newsletter_input": "#F4F4F4",
               "color_newsletter_input_text": "#666",
               "title": "Subscribe",
               "subheading": "<p>Promotions, new products and sales. Directly to your inbox.<\/p>"

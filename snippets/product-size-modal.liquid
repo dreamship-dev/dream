@@ -1,8 +1,38 @@
 <div class="popup overlay" id="sizePopup">
   <div class="popup-inner">
     <div class="popup-content left">
-    	<a class="popup-close" data-close aria-label="Close popup">Close</a>
-      <p>Size chart currently unavailable for this product.</>
+      <div class="popup-header">
+	    	<h4>Size Chart</h4>
+	    	<a class="popup-close" data-close aria-label="Close popup">
+	    		{% include 'icon-close' %}
+	    	</a>
+	    </div>
+	    {% if product.metafields.dreamship.sizes %}
+		    {% assign headers = product.metafields.dreamship.sizes | where: "header", true %}
+		    {% assign rows = product.metafields.dreamship.sizes | where: "header", false %}
+	    	<table>
+	        <thead>
+	          {% for h in headers %}
+	          	<tr>
+	          		{% for col in h.row %}
+					    		<th>{{ col }}</th>
+					    	{% endfor %}
+					    </tr>
+					  {% endfor %}
+	        </thead>
+	        <tbody>
+	        	{% for r in rows %}
+	          	<tr>
+	          		{% for col in r.row %}
+					    		<td>{{ col }}</td>
+					    	{% endfor %}
+					    </tr>
+					  {% endfor %}
+	        </tbody>
+	      </table>
+      {% else %}
+      	<p>Size chart not available for this product.</p>
+      {% endif %}
     </div>
   </div>
 </div>

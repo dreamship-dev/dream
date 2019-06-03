@@ -1,8 +1,38 @@
 <div class="popup overlay" id="deliveryPopup">
   <div class="popup-inner">
     <div class="popup-content left">
-    	<a class="popup-close" data-close aria-label="Close popup">Close</a>
-      	<p>Delivery times currently unavailable for this product.</>
+      <div class="popup-header">
+        <h4>Delivery</h4>
+        <a class="popup-close" data-close aria-label="Close popup">
+          {% include 'icon-close' %}
+        </a>
+      </div>
+      {% if product.metafields.dreamship.deliveries %}
+        {% assign zones = product.metafields.dreamship.deliveries.zones %}
+        {% assign show_worldwide_footnote = product.metafields.dreamship.deliveries.show_worldwide_footnote %}
+        <table>
+          <thead>
+            <tr>
+              <th>Countries</th>
+              <th>Delivery</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for z in zones %}
+              <tr>
+                <td>{{ z.countries | join: ', '}}</td>
+                <td>{{ z.min }}&ndash;{{ z.max }} days</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% if show_worldwide_footnote %}
+          <br>
+          <p>*Delivery times to rest of world can greatly vary. If you have specific questions about delivery to your country please contact support.</p>
+        {% endif %}
+      {% else %}
+        <p>Delivery times not available for this product.</p>
+      {% endif %}
     </div>
   </div>
 </div>
