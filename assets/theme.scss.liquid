@@ -3004,6 +3004,7 @@ input[type='search']::-webkit-search-cancel-button {
 .sticky--open {
   @include transform(translate3d(0, 0, 0));
   transition: $sticky-transition-open;
+  border-bottom: 1px solid $color-header-border
 }
 
 // Show/hide elements in the sticky bar
@@ -6552,7 +6553,7 @@ $colorBackground: #fff;
 
 // Overlays
 @mixin overlay() {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
