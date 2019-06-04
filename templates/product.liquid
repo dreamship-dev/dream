@@ -4,11 +4,20 @@
 
 {% section 'product-template' %}
 
+{% section 'product-recommendations' %}
+
 {% if collection %}
   <div class="full-width full-width--return-link">
     <a href="{{ collection.url }}" class="h1 return-link">
       {% include 'icon-arrow-thin-left' %}
       {{ 'products.product.collection_return' | t: collection: collection.title }}
+    </a>
+  </div>
+{% else %}
+  <div class="full-width full-width--return-link">
+    <a href="/collections/all" class="h1 return-link">
+      {% include 'icon-arrow-thin-left' %}
+      Back to all products
     </a>
   </div>
 {% endif %}

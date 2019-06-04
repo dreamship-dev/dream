@@ -55,11 +55,6 @@
               {% endfor %}
             </div>
           </div>
-        {% endif %}
-        {% if product.images.size > 2 %}
-          {% comment %}
-            Add SVG icon snippets to an object for custom slider arrows
-          {% endcomment %}
           <script>
             {% capture arrow_left %}{% include 'icon-arrow-left' %}{% endcapture %}
             {% capture arrow_right %}{% include 'icon-arrow-right' %}{% endcapture %}
@@ -74,6 +69,29 @@
           </script>
         {% endif %}
       </div>
+
+      {% if section.settings.product_grouping_thumbnails %}
+        {% assign group_tags = product.tags | where: "group-" %}
+        {% if group_tags.size > 0 %}
+          <hr class="photos--grouped-main">
+          <div class="photos photos_grouped--left photos--grouped-main">
+            <div class="photos__item photos__item--main">
+              {% for tagged_product in collections.all.products %}      
+                {% for tag in group_tags %}
+                  {% if tagged_product.tags contains tag %}
+                    {% if tagged_product.id != product.id %}
+                      <a href="{{tagged_product.url}}" id="ProductTypeImage" title="{{ tagged_product.title }}">
+                        <img src={{ tagged_product.featured_image | img_url: '100x100'}} />
+                      </a>
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+
     </div>
 
     <div class="grid__item {% if product.images.size > 1 %}medium-up--two-fifths{% else %}medium-up--one-half{% endif %}" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
@@ -189,7 +207,6 @@
                 };
               </script>
             {% endif %}
-
           {% endif %}
 
           {% unless product.has_only_default_variant %}
@@ -257,6 +274,30 @@
             <a href='#' data-trigger="popup" data-detach={{ true }} data-target="#deliveryPopup">
               Delivery Times
             </a>
+          {% endif %}
+        {% endif %}
+
+        {% if section.settings.product_grouping_thumbnails %}
+          {% assign group_tags = product.tags | where: "group-" %}
+          {% if group_tags.size > 0 %}
+            <hr class="photos--grouped">
+            <div class="photos photos--grouped">
+              <div class="photos__item photos__item--thumbs">
+                <div class="product-single__thumbnails product-single__thumbnails-{{ section.id }}{% unless product.images.size > 2 %} product-single__thumbnails--static{% endunless %}">
+                  {% for tagged_product in collections.all.products %}      
+                    {% for tag in group_tags %}
+                      {% if tagged_product.tags contains tag %}
+                          <div class="product-single__thumbnail-item{% if tagged_product.id == product.id %} is-active{% endif %}">
+                            <a href="{{ tagged_product.url }}" class="product-single__thumbnail ">
+                              <img src="{{ tagged_product.featured_image | img_url: '160x160' }}" alt="{{ tagged_product.title | escape }}">
+                            </a>
+                          </div>
+                      {% endif %}
+                    {% endfor %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
           {% endif %}
         {% endif %}
 
@@ -389,6 +430,14 @@
       "id": "product_grouping_products",
       "label": {
         "en": "Enable product type grouping (if available)"
+      },
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "product_grouping_thumbnails",
+      "label": {
+        "en": "Show grouped product thumbnails (if available)"
       },
       "default": false
     },

@@ -351,7 +351,7 @@ $gutter-slideshow: 0.625rem; // 10px
 {% else %}
   $product-slider-padding: 0;
 {% endif %}
-$product-slider-image-height: 130px;
+$product-slider-image-height: 100px;
 
 /*================ Collection Grid ================*/
 $collection-card-height: $product-card-height + $product-image-margin-bottom;
@@ -1736,7 +1736,7 @@ h6 {
 //Use em() Sass function to declare font-size
 h1 {
   @include accent-text();
-  font-size: em(30);
+  font-size: em(24);
 
   @include media-query($medium-up) {
     font-size: em(36);
@@ -3570,6 +3570,13 @@ html {
     border-left-width: 1px;
   }
 
+  .grid--recommendations & {
+    border-top-width: 1px;
+    &:last-child {
+      border-right-width: 1px;
+    }
+  }
+
   .collection__card--first & {
     border-left-width: 0;
   }
@@ -3809,6 +3816,9 @@ html {
 
 .product-form__item--quantity {
   @include flex(0 0 100px);
+  @include media-query($small) {
+    @include flex(0 0 100%);
+  }
 }
 
 .product-form__item--submit {
@@ -3816,6 +3826,16 @@ html {
   display: flex;
   @include flex-direction(column);
   margin-top: 0px;
+
+  @include media-query($small) {
+    position: fixed;
+    margin: 0 $gutter-site $gutter-site $gutter-site;
+    z-index: $z-index-stickynav;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: auto;
+  }
 
   .product-form--payment-button & {
     margin-top: 10px;
@@ -3896,11 +3916,27 @@ html {
   max-width: 100%;
 }
 
+.photos--grouped {
+  @include display-flexbox();
+}
+
+.photos--grouped-main {
+  display: none;
+}
+
 @include media-query($medium-up) {
   .photos {
     @include display-flexbox();
     @include align-items(flex-start);
     flex-direction: row;
+  }
+
+  .photos--grouped-main {
+    @include display-flexbox();
+  }
+
+  .photos--grouped {
+    display: none;
   }
 
   .photos__item--main {
@@ -3950,7 +3986,7 @@ html {
 
 .product-single__thumbnails {
   display: none;
-  margin: 0 ($gutter-site * 2) $gutter-site;
+  margin: 0 ($gutter-site) $gutter-site;
 
   &.slick-initialized {
     display: block;
@@ -3982,6 +4018,10 @@ html {
   max-width: 200px;
   margin: 0 auto;
 
+  @include media-query($small) {
+    height: $product-slider-image-height * .75;
+  }
+
   img {
     position: relative;
     top: 50%;
@@ -3989,6 +4029,10 @@ html {
     display: block;
     max-height: $product-slider-image-height - ($product-slider-padding * 2);
     margin: 0 auto;
+
+     @include media-query($small) {
+      max-height: ($product-slider-image-height*.75) - ($product-slider-padding * 2);
+    }
 
     .no-csstransforms & {
       top: 0;
@@ -5130,7 +5174,13 @@ html {
 
   @include media-query($small) {
     display: block;
-    width: 100%;
+    position: fixed;
+    margin: 0 $gutter-site $gutter-site $gutter-site;
+    width: calc(100% - (#{$gutter-site} * 2));
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: $z-index-stickynav;
   }
 }
 
