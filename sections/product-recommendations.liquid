@@ -1,13 +1,15 @@
 <div class="product-recommendations" data-product-id="{{ product.id }}" data-limit="4">
   {%- if recommendations.products_count > 0 and section.settings.product_recommendations_show -%}
     <div class="page-width">
-      <h4 class="center">You may also like</h4>
-      <div class="grid grid--no-gutters grid--recommendations" id="collection-list-grid" data-number-rows="{{ number_rows }}">
-        {%- for product in recommendations.products -%}
-          <div class="grid__item one-half medium-up--one-quarter">
-            {% include 'product-card', product: product %}
-          </div>
-        {%- endfor -%}
+      <div class="product-single__info-wrapper">
+        <h4 class="center">You may also like</h4>
+        <div class="grid grid--no-gutters grid--recommendations" id="collection-list-grid" data-number-rows="{{ number_rows }}">
+          {%- for product in recommendations.products -%}
+            <div class="grid__item one-half medium-up--one-quarter">
+              {% include 'product-card', product: product %}
+            </div>
+          {%- endfor -%}
+        </div>
       </div>
     </div>
     <br>

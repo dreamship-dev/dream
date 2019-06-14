@@ -25,9 +25,15 @@
   <div class="grid grid--no-gutters grid--uniform">
 
     {% for product in collection.products %}
-      <div class="grid__item small--one-half medium-up--one-fifth">
-        {% include 'product-card', product: product %}
-      </div>
+      {% if settings.product_rows_compact %}
+        <div class="grid__item small--one-half medium-up--one-fifth">
+            {% include 'product-card', product: product %}
+        </div>
+      {% else %}
+        <div class="grid__item small--one-whole medium-up--one-quarter">
+           {% include 'product-card', product: product %}
+        </div>
+      {% endif %}
     {% else %}
       {% comment %}
         Add default products to help with onboarding for collections/all only.

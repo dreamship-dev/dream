@@ -647,6 +647,14 @@
           "zh-CN": "在图片周围显示框架",
           "zh-TW": "顯示圖片周圍邊框"
         },
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "product_rows_compact",
+        "label": {
+          "en": "Compact rows"
+        },
         "default": true
       },
       {

@@ -70,28 +70,73 @@
         {% endif %}
       </div>
 
-      {% if section.settings.product_grouping_thumbnails %}
+      {% if section.settings.product_grouping_thumbnails or section.settings.product_grouping_products %}
         {% assign group_tags = product.tags | where: "group-" %}
+        {% assign has_group_tags = false %}
         {% if group_tags.size > 0 %}
-          <hr class="photos--grouped-main">
-          <div class="photos photos_grouped--left photos--grouped-main">
-            <div class="photos__item photos__item--main">
-              {% for tagged_product in collections.all.products %}      
-                {% for tag in group_tags %}
-                  {% if tagged_product.tags contains tag %}
-                    {% if tagged_product.id != product.id %}
-                      <a href="{{tagged_product.url}}" id="ProductTypeImage" title="{{ tagged_product.title }}">
-                        <img src={{ tagged_product.featured_image | img_url: '100x100'}} />
-                      </a>
-                    {% endif %}
-                  {% endif %}
-                {% endfor %}
-              {% endfor %}
-            </div>
-          </div>
+          {% assign has_group_tags = true %}
         {% endif %}
-      {% endif %}
+        {% for tag in group_tags %}
+            <script>
+              var loadGroupedProductsIntoSection = function() {
+                var productGroupSection = document.querySelector(".product-group");
+                var requestUrl = "/collections/all/{{ tag }}?view=json"
+                // console.log(requestUrl)
+                var request = new XMLHttpRequest();
+                request.open("GET", requestUrl);
+                request.onload = function() {
+                  if (request.status >= 200 && request.status < 300) {
+                    var products = JSON.parse(request.response)
+                    {% if section.settings.product_grouping_products %}
+                      $.each(products, function(key, value) {   
+                        // console.log(key, value)
+                        $('#ProductTypeSelector')
+                          .append($("<option></option>")
+                          .attr("value", value.id)
+                          .attr("data-url", value.url)
+                          .text(value.title))
+                      });
+                      $('#ProductTypeSelector').val({{ product.id }});
+                      $('#ProductTypeSelector').change(function() {
+                        var url =$("#ProductTypeSelector option:selected")[0].attributes['data-url'].value
+                        // console.log(url)
+                        location.replace(url);
+                      });
+                    {% endif %}
+                    {% if section.settings.product_grouping_thumbnails %}
+                      $.each(products, function(key, value) {   
+                        // console.log(key, value)
+                        // $('#ProductGroupingMobile')
+                        //   .append(
+                        //     `
+                        // )
+                        console.log(value.id, {{ product.id }})
+                        $('#ProductGroupingMobile')
+                          .append(
+                            `<div class="grid__item one-half medium-up--one-quarter">
+                                <a href="${value.url}" class="product-group__mobile-thumbnail">
+                                  <img src="${value.thumbnail}" alt="${value.title}">
+                                  <div class="product-group__mobile-info">
+                                    <div class="product-card__name">${value.title}</div>
+                                  </div>
+                               </a>
+                            </div>`
+                          ).find('.product-group__mobile-thumbnail').last().addClass(value.id === {{ product.id }} ? "is-active" : "")
+                      });
 
+                      // unhide all product grouping after everything has loaded
+                      $('.product-grouping').removeClass('is-hidden');
+
+                    {% endif %}
+                  };
+                };
+                request.send();
+              };
+
+              loadGroupedProductsIntoSection();
+            </script>
+        {% endfor %}
+      {% endif %}
     </div>
 
     <div class="grid__item {% if product.images.size > 1 %}medium-up--two-fifths{% else %}medium-up--one-half{% endif %}" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
@@ -170,11 +215,8 @@
         {% capture "form_id" %}AddToCartForm-{{ section.id }}{%- endcapture %}
 
         {% form 'product', product, class:form_class, id:form_id %}
-          {% if section.settings.product_grouping_products %}
-            {% assign group_tags = product.tags | where: "group-" %}
-            {% if group_tags.size > 0 %}
-    
-              <hr>
+          {% if section.settings.product_grouping_products and has_group_tags %}
+            <div class="product-grouping is-hidden">
               <div class="selector-wrapper js product-form__item">
                 <label>Product Type</label>
                 <select class="single-option-selector single-option-selector-product-type product-form__input"
@@ -182,31 +224,9 @@
                   data-name="product-type"
                   data-index="option0"
                 >
-                  {% for tagged_product in collections.all.products %}      
-                    {% for tag in group_tags %}
-                      {% if tagged_product.tags contains tag %}
-                        <option value={{tagged_product.id}} data-url={{tagged_product.url}}>
-                          {% if tagged_product.metafields.dreamship.product %}
-                            {{ tagged_product.metafields.dreamship.product }}
-                          {% else %}
-                            {{ tagged_product.title }}
-                          {% endif %}
-                        </option>
-                      {% endif %}
-                    {% endfor %}
-                  {% endfor %}
                 </select>
               </div>
-              <script>
-                document.getElementById("ProductTypeSelector").value = {{product.id}};
-                window.onload = function() {
-                  $( "#ProductTypeSelector" ).change(function() {
-                    var url =$("#ProductTypeSelector option:selected")[0].attributes['data-url'].value
-                    location.replace(url);
-                  });
-                };
-              </script>
-            {% endif %}
+            </div>
           {% endif %}
 
           {% unless product.has_only_default_variant %}
@@ -260,44 +280,20 @@
           </div>
         {% endform %}
 
-        {% if section.settings.size_chart_products or section.settings.delivery_chart_products %}
+        {% if section.settings.size_chart_products and product.metafields.dreamship.sizes or section.settings.delivery_chart_products and  product.metafields.dreamship.deliveries %}
           <hr>
-          {% if section.settings.size_chart_products %}
+          {% if section.settings.size_chart_products and product.metafields.dreamship.sizes %}
             <a href='#' data-trigger="popup" data-detach={{ true }} data-target="#sizePopup">
               Size Chart
             </a>
           {% endif %}
-          {% if section.settings.size_chart_products and section.settings.delivery_chart_products %}
+          {% if section.settings.size_chart_products and product.metafields.dreamship.sizes and section.settings.delivery_chart_products and product.metafields.dreamship.deliveries %}
             <span>&nbsp;&mdash;&nbsp;</span>
           {% endif %}
-          {% if section.settings.delivery_chart_products %}
+          {% if section.settings.delivery_chart_products and product.metafields.dreamship.deliveries %}
             <a href='#' data-trigger="popup" data-detach={{ true }} data-target="#deliveryPopup">
               Delivery Times
             </a>
-          {% endif %}
-        {% endif %}
-
-        {% if section.settings.product_grouping_thumbnails %}
-          {% assign group_tags = product.tags | where: "group-" %}
-          {% if group_tags.size > 0 %}
-            <hr class="photos--grouped">
-            <div class="photos photos--grouped">
-              <div class="photos__item photos__item--thumbs">
-                <div class="product-single__thumbnails product-single__thumbnails-{{ section.id }}{% unless product.images.size > 2 %} product-single__thumbnails--static{% endunless %}">
-                  {% for tagged_product in collections.all.products %}      
-                    {% for tag in group_tags %}
-                      {% if tagged_product.tags contains tag %}
-                          <div class="product-single__thumbnail-item{% if tagged_product.id == product.id %} is-active{% endif %}">
-                            <a href="{{ tagged_product.url }}" class="product-single__thumbnail ">
-                              <img src="{{ tagged_product.featured_image | img_url: '160x160' }}" alt="{{ tagged_product.title | escape }}">
-                            </a>
-                          </div>
-                      {% endif %}
-                    {% endfor %}
-                  {% endfor %}
-                </div>
-              </div>
-            </div>
           {% endif %}
         {% endif %}
 
@@ -305,6 +301,16 @@
         <div class="rte product-single__description" itemprop="description">
           {{ product.description }}
         </div>
+
+        {% if section.settings.product_grouping_thumbnails and has_group_tags %}
+          <div class="product-grouping is-hidden">
+            <div class="product-grouping__mobile-wrapper">
+              <hr>
+              <label>Product Type</label>
+              <div class="grid grid--no-gutters" id="ProductGroupingMobile"></div>
+            </div>
+          </div>
+        {% endif %}
 
         {% if section.settings.payment_icons_products %}
           <hr>

@@ -1,0 +1,11 @@
+{%- layout none -%}
+{%- paginate collection.products by 50 -%}
+  [{%- for product in collection.products -%}
+    {%- if product.metafields.dreamship.product -%}
+      {%- assign title = product.metafields.dreamship.product -%}
+    {%- else -%}
+      {%- assign title = product.title -%}
+    {%- endif -%}
+    {"id": {{- product.id -}},"title": "{{- title -}}","url": "{{- product.url -}}","thumbnail": "{{- product.featured_image | img_url: '160x160' -}}","tags": {{- product.tags | json -}}}{%-if product.id != collection.products.last.id -%},{%-endif-%}
+  {%- endfor -%}]
+{%- endpaginate -%}
