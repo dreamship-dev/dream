@@ -13,6 +13,74 @@
   {% endcomment %}
   {% assign current_variant = product.selected_or_first_available_variant %}
 
+  {% comment %}
+    Product grouping
+  {% endcomment %}
+  {% if section.settings.product_grouping_thumbnails or section.settings.product_grouping_products %}
+    {% assign group_tags = product.tags | where: "group-" %}
+    {% assign has_group_tags = false %}
+    {% if group_tags.size > 0 %}
+      {% assign has_group_tags = true %}
+    {% endif %}
+    {% for tag in group_tags %}
+        <script>
+          var loadGroupedProductsIntoSection = function() {
+            var productGroupSection = document.querySelector(".product-group");
+            var requestUrl = "/collections/all/{{ tag }}?view=json"
+            // console.log(requestUrl)
+            var request = new XMLHttpRequest();
+            request.open("GET", requestUrl);
+            request.onload = function() {
+              if (request.status >= 200 && request.status < 300) {
+                var products = JSON.parse(request.response)
+                {% if section.settings.product_grouping_products %}
+                  $.each(products, function(key, value) {   
+                    // console.log(key, value)
+                    $('#ProductTypeSelector')
+                      .append($("<option></option>")
+                      .attr("value", value.id)
+                      .attr("data-url", value.url)
+                      .text(value.title))
+                  });
+                  $('#ProductTypeSelector').val({{ product.id }});
+                  $('#ProductTypeSelector').change(function() {
+                    var url =$("#ProductTypeSelector option:selected")[0].attributes['data-url'].value
+                    // console.log(url)
+                    location.replace(url);
+                  });
+                {% endif %}
+                {% if section.settings.product_grouping_thumbnails %}
+                  $.each(products, function(key, value) {   
+                    $('#ProductGrouping')
+                      .append(
+                        `<div class="grid__item one-half medium-up--one-quarter">
+                            <a href="${value.url}" class="product-group__thumbnail">
+                              <img src="${value.thumbnail}" alt="${value.title}">
+                              <div class="product-group__info">
+                                <div class="product-card__name">${value.title}</div>
+                              </div>
+                           </a>
+                        </div>`
+                      )
+                      .find('.product-group__thumbnail')
+                      .last()
+                      .addClass(value.id === {{ product.id }} ? "is-active" : "")
+                  });
+
+                  // unhide all product grouping after everything has loaded
+                  $('.product-grouping').removeClass('is-hidden');
+
+                {% endif %}
+              };
+            };
+            request.send();
+          };
+
+          loadGroupedProductsIntoSection();
+        </script>
+    {% endfor %}
+  {% endif %}
+
   <div class="grid product-single">
     <div class="grid__item {% if product.images.size > 1 %}medium-up--three-fifths{% else %}medium-up--one-half{% endif %}">
       <div class="photos">
@@ -69,74 +137,6 @@
           </script>
         {% endif %}
       </div>
-
-      {% if section.settings.product_grouping_thumbnails or section.settings.product_grouping_products %}
-        {% assign group_tags = product.tags | where: "group-" %}
-        {% assign has_group_tags = false %}
-        {% if group_tags.size > 0 %}
-          {% assign has_group_tags = true %}
-        {% endif %}
-        {% for tag in group_tags %}
-            <script>
-              var loadGroupedProductsIntoSection = function() {
-                var productGroupSection = document.querySelector(".product-group");
-                var requestUrl = "/collections/all/{{ tag }}?view=json"
-                // console.log(requestUrl)
-                var request = new XMLHttpRequest();
-                request.open("GET", requestUrl);
-                request.onload = function() {
-                  if (request.status >= 200 && request.status < 300) {
-                    var products = JSON.parse(request.response)
-                    {% if section.settings.product_grouping_products %}
-                      $.each(products, function(key, value) {   
-                        // console.log(key, value)
-                        $('#ProductTypeSelector')
-                          .append($("<option></option>")
-                          .attr("value", value.id)
-                          .attr("data-url", value.url)
-                          .text(value.title))
-                      });
-                      $('#ProductTypeSelector').val({{ product.id }});
-                      $('#ProductTypeSelector').change(function() {
-                        var url =$("#ProductTypeSelector option:selected")[0].attributes['data-url'].value
-                        // console.log(url)
-                        location.replace(url);
-                      });
-                    {% endif %}
-                    {% if section.settings.product_grouping_thumbnails %}
-                      $.each(products, function(key, value) {   
-                        // console.log(key, value)
-                        // $('#ProductGroupingMobile')
-                        //   .append(
-                        //     `
-                        // )
-                        console.log(value.id, {{ product.id }})
-                        $('#ProductGroupingMobile')
-                          .append(
-                            `<div class="grid__item one-half medium-up--one-quarter">
-                                <a href="${value.url}" class="product-group__mobile-thumbnail">
-                                  <img src="${value.thumbnail}" alt="${value.title}">
-                                  <div class="product-group__mobile-info">
-                                    <div class="product-card__name">${value.title}</div>
-                                  </div>
-                               </a>
-                            </div>`
-                          ).find('.product-group__mobile-thumbnail').last().addClass(value.id === {{ product.id }} ? "is-active" : "")
-                      });
-
-                      // unhide all product grouping after everything has loaded
-                      $('.product-grouping').removeClass('is-hidden');
-
-                    {% endif %}
-                  };
-                };
-                request.send();
-              };
-
-              loadGroupedProductsIntoSection();
-            </script>
-        {% endfor %}
-      {% endif %}
     </div>
 
     <div class="grid__item {% if product.images.size > 1 %}medium-up--two-fifths{% else %}medium-up--one-half{% endif %}" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
@@ -304,10 +304,10 @@
 
         {% if section.settings.product_grouping_thumbnails and has_group_tags %}
           <div class="product-grouping is-hidden">
-            <div class="product-grouping__mobile-wrapper">
+            <div class="product-grouping__wrapper">
               <hr>
               <label>Product Type</label>
-              <div class="grid grid--no-gutters" id="ProductGroupingMobile"></div>
+              <div class="grid grid--no-gutters" id="ProductGrouping"></div>
             </div>
           </div>
         {% endif %}
@@ -435,7 +435,7 @@
       "type": "checkbox",
       "id": "product_grouping_products",
       "label": {
-        "en": "Enable product type grouping (if available)"
+        "en": "Enable grouped product select form (if available)"
       },
       "default": false
     },
