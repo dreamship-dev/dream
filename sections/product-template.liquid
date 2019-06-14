@@ -33,6 +33,14 @@
             request.onload = function() {
               if (request.status >= 200 && request.status < 300) {
                 var products = JSON.parse(request.response)
+                
+                // sort by a-z
+                products.sort(function(a, b){
+                  if(a.title < b.title) { return -1; }
+                  if(a.title > b.title) { return 1; }
+                  return 0;
+                })
+
                 {% if section.settings.product_grouping_products %}
                   $.each(products, function(key, value) {   
                     // console.log(key, value)
@@ -53,7 +61,7 @@
                   $.each(products, function(key, value) {   
                     $('#ProductGrouping')
                       .append(
-                        `<div class="grid__item one-half medium-up--one-quarter">
+                        `<div class="flex__item--fixed one-half medium-up--one-quarter">
                             <a href="${value.url}" class="product-group__thumbnail">
                               <img src="${value.thumbnail}" alt="${value.title}">
                               <div class="product-group__info">
@@ -218,7 +226,7 @@
           {% if section.settings.product_grouping_products and has_group_tags %}
             <div class="product-grouping is-hidden">
               <div class="selector-wrapper js product-form__item">
-                <label>Product Type</label>
+                <label>Product</label>
                 <select class="single-option-selector single-option-selector-product-type product-form__input"
                   id="ProductTypeSelector"
                   data-name="product-type"
@@ -302,16 +310,6 @@
           {{ product.description }}
         </div>
 
-        {% if section.settings.product_grouping_thumbnails and has_group_tags %}
-          <div class="product-grouping is-hidden">
-            <div class="product-grouping__wrapper">
-              <hr>
-              <label>Product Type</label>
-              <div class="grid grid--no-gutters" id="ProductGrouping"></div>
-            </div>
-          </div>
-        {% endif %}
-
         {% if section.settings.payment_icons_products %}
           <hr>
           {% include 'payment-icons', share_title: product.title, share_permalink: product.url, share_image: product %}
@@ -320,6 +318,16 @@
         {% if section.settings.social_sharing_products %}
           <hr>
           {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
+        {% endif %}
+
+        {% if section.settings.product_grouping_thumbnails and has_group_tags %}
+          <div class="product-grouping is-hidden">
+            <div class="product-grouping__wrapper">
+              <hr>
+              <label>Similar Products</label>
+              <div class="flex flex--grid flex--no-gutter" id="ProductGrouping"></div>
+            </div>
+          </div>
         {% endif %}
       </div>
     </div>
