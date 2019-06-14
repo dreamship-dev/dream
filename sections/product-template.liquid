@@ -27,7 +27,6 @@
           var loadGroupedProductsIntoSection = function() {
             var productGroupSection = document.querySelector(".product-group");
             var requestUrl = "/collections/all/{{ tag }}?view=json"
-            // console.log(requestUrl)
             var request = new XMLHttpRequest();
             request.open("GET", requestUrl);
             request.onload = function() {
@@ -43,7 +42,6 @@
 
                 {% if section.settings.product_grouping_products %}
                   $.each(products, function(key, value) {   
-                    // console.log(key, value)
                     $('#ProductTypeSelector')
                       .append($("<option></option>")
                       .attr("value", value.id)
@@ -53,7 +51,6 @@
                   $('#ProductTypeSelector').val({{ product.id }});
                   $('#ProductTypeSelector').change(function() {
                     var url =$("#ProductTypeSelector option:selected")[0].attributes['data-url'].value
-                    // console.log(url)
                     location.replace(url);
                   });
                 {% endif %}
